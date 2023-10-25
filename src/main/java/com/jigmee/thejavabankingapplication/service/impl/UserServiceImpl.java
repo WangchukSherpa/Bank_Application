@@ -5,6 +5,7 @@ import com.jigmee.thejavabankingapplication.entity.User;
 import com.jigmee.thejavabankingapplication.repo.UserRepository;
 import com.jigmee.thejavabankingapplication.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +20,8 @@ public class UserServiceImpl implements UserService{
     EmailService emailService;
     @Autowired
     TransactionService transactionService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
 
@@ -43,6 +46,7 @@ public class UserServiceImpl implements UserService{
                 .address(userRequest.getAddress())
                 .stateOfOrigin(userRequest.getStateOfOrigin())
                 .status("ACTIVE")
+                .password(passwordEncoder.encode(userRequest.getPassword()))
                 .accountNumber(AccountUtils.generateAccountNumber())
                 .email(userRequest.getEmail())
                 .accountBalance(BigDecimal.ZERO)
